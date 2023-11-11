@@ -45,3 +45,17 @@ Assuming you have [created a cycles wallet](https://internetcomputer.org/docs/cu
 ```bash
 npm run canister_deploy_mainnet
 ```
+
+
+
+Primero, definiremos la estructura de datos de un proyecto universitario. Esta estructura incluirá detalles como el identificador del proyecto, información sobre el estudiante, descripción del proyecto, y un estado que indica si el proyecto ha sido validado o no.
+
+En este código:
+
+- Definimos la estructura `UniversityProject` para representar un proyecto universitario.
+- `enrollProject` es una función de actualización que inscribe un nuevo proyecto.
+- `getProjectDetails` es una función de consulta que devuelve los detalles de un proyecto específico.
+- `validateProject` es una función de actualización que cambia el estado de un proyecto a validado.
+- `listAllProjects` es una función de consulta que devuelve una lista de todos los proyectos inscritos.
+
+Este código proporciona una base sólida para un canister que maneja proyectos universitarios, permitiendo su inscripción, consulta de detalles, validación y listado. Asegúrate de ajustar este código según las necesidades específicas de tu proyecto y el entorno en el que estás trabajando.

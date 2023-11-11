@@ -1,5 +1,41 @@
 # Alegra_Studio
 
+
+Se utiliza una combinación de estructuras de datos y métodos query para gestionar y consultar información sobre proyectos universitarios en un canister desarrollado con Azle para la Internet Computer. Aquí desgloso cómo se utilizan estos elementos:
+Estructura de Datos: UniversityProject
+
+    Se define una estructura de datos llamada UniversityProject utilizando Record de Azle. Esta estructura representa cada proyecto universitario.
+    La estructura UniversityProject incluye campos como projectId (identificador del proyecto), studentInfo (información del estudiante), description (descripción del proyecto) y isValidated (estado de validación del proyecto).
+
+Almacenamiento de Proyectos: projects
+
+    Se crea una variable projects que es un mapa estable (StableBTreeMap) para almacenar los proyectos. Este mapa asocia cada Principal (identificador único de un proyecto) con su correspondiente UniversityProject.
+
+Métodos del Canister
+
+    Método enrollProject (Función de Actualización):
+        Este método utiliza update para inscribir un nuevo proyecto.
+        La función toma información del estudiante y descripción del proyecto como argumentos y almacena un nuevo UniversityProject en el mapa projects.
+        Retorna el Principal del proyecto inscrito.
+
+    Método getProjectDetails (Función de Consulta - Query):
+        Utiliza query para obtener detalles de un proyecto específico.
+        Esta función de consulta accede al mapa projects para buscar un proyecto por su Principal.
+        Devuelve la estructura del proyecto si existe o lanza un error si el proyecto no se encuentra.
+
+    Método validateProject (Función de Actualización):
+        Aunque este método modifica el estado de un proyecto (validándolo), es una función de actualización (update) y no una consulta (query), ya que altera el estado del canister.
+
+    Método listAllProjects (Función de Consulta - Query):
+        Utiliza query para listar todos los proyectos.
+        Esta función no modifica el estado del canister y devuelve una lista de todos los UniversityProject almacenados en projects.
+
+Conclusión Técnica
+
+El código combina hábilmente estructuras de datos con funciones de consulta y actualización para crear un sistema eficiente de gestión de proyectos universitarios en un canister. Los métodos query (getProjectDetails y listAllProjects) son esenciales para acceder a la información almacenada sin modificarla, mientras que las funciones de actualización (enrollProject y validateProject) cambian el estado del canister. Esta combinación permite un manejo robusto y eficiente de los datos dentro del canister, aprovechando las capacidades de la plataforma Internet Computer.
+
+
+__________________________
 Welcome to your first Azle project! This example project will help you to deploy your first canister (application) to the Internet Computer (IC) decentralized cloud. It is a simple getter/setter canister. You can always refer to [The Azle Book](https://demergent-labs.github.io/azle/) for more in-depth documentation.
 
 `dfx` is the tool you will use to interact with the IC locally and on mainnet. If you don't already have it installed:

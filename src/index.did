@@ -1,0 +1,23 @@
+type Principal = principal;
+type Text = text;
+
+type UniversityProject = record {
+    projectId: Principal;
+    studentInfo: Text;
+    description: Text;
+    isValidated: variant { Yes; No; };
+};
+
+service : {
+    // Inscribir un nuevo proyecto
+    enrollProject: (Text, Text) -> (Principal) update;
+    
+    // Obtener detalles de un proyecto específico
+    getProjectDetails: (Principal) -> (UniversityProject) query;
+    
+    // Validar un proyecto
+    validateProject: (Principal) -> () update;
+    
+    // Listar todos los proyectos
+    listAllProjects: () -> (vec UniversityProject) query;
+}

@@ -1,0 +1,13 @@
+{
+    "canisters": {
+        "Alegra_Studio": {
+            "type": "custom",
+            "main": "src/index.ts",
+            "candid": "src/index.did",
+            "build": "npx azle Alegra_Studio",
+            "wasm": ".azle/Alegra_Studio/Alegra_Studio.wasm",
+            "gzip": true
+        }
+    }
+}
+

@@ -1,6 +1,7 @@
 import { Canister, query, text, update, Principal, Variant, Record, StableBTreeMap, Void, Vec, ic } from 'azle';
 
-// Estructura de un proyecto universitario
+// Estructura de un proyecto universitario: Se define una estructura de datos llamada UniversityProject utilizando Record de Azle. Esta estructura representa cada proyecto universitario.
+// La estructura UniversityProject incluye campos como projectId (identificador del proyecto), studentInfo (información del estudiante), description (descripción del proyecto) y isValidated (estado de validación del proyecto).
 const UniversityProject = Record({
     projectId: Principal,
     studentInfo: text,

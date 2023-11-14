@@ -1,0 +1,44 @@
+import { Canister, query, text, update, Principal, Record, StableBTreeMap, Void, Vec, DateTime } from 'azle';
+
+// Estructura para un evento o actividad
+const Event = Record({
+    eventId: Principal,
+    projectName: text,
+    organizerId: Principal,
+    description: text,
+    eventDate: DateTime
+});
+
+// Almacenamiento de eventos
+let events = StableBTreeMap(Principal, Event, 0);
+
+export default Canister({
+    // Crear un nuevo evento
+    createEvent: update([text, text, DateTime], Principal, (projectName, description, eventDate) => {
+        const eventId = ic.principal();
+        const organizerId = ic.caller();
+        const event = {
+            eventId,
+            projectName,
+            organizerId,
+            description,
+            eventDate
+        };
+        events.insert(eventId, event);
+        return eventId;
+    }),
+
+    // Obtener detalles de un evento específico
+    getEventDetails: query([Principal], Event, (eventId) => {
+        const eventOpt = events.get(eventId);
+        if ('None' in eventOpt) {
+            throw new Error('Event not found');
+        }
+        return eventOpt.Some;
+    }),
+
+    // Listar todos los eventos
+    listAllEvents: query([], Vec(Event), () => {
+        return events.values();
+    })
+});

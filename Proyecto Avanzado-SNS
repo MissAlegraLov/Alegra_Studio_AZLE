@@ -1,0 +1,47 @@
+import { Canister, query, update, Principal, Record, StableBTreeMap, Void, Vec, nat64, text, ic } from 'azle';
+
+// Estructura para manejar la gobernanza y las propuestas en el SNS
+const SnsGovernanceProposal = Record({
+    proposalId: Principal,
+    details: text,
+    status: Variant({ Open: {}, Accepted: {}, Rejected: {} }),
+    votes: nat64
+});
+
+// Almacenamiento de propuestas de gobernanza
+let governanceProposals = StableBTreeMap(Principal, SnsGovernanceProposal, 0);
+
+export default Canister({
+    // Crear una nueva propuesta de gobernanza
+    createGovernanceProposal: update([text], Principal, (details) => {
+        const proposalId = ic.principal();
+        const proposal = {
+            proposalId,
+            details,
+            status: { Open: {} },
+            votes: 0
+        };
+        governanceProposals.insert(proposalId, proposal);
+        return proposalId;
+    }),
+
+    // Votar por una propuesta de gobernanza
+    voteOnProposal: update([Principal, boolean], Void, (proposalId, vote) => {
+        const proposalOpt = governanceProposals.get(proposalId);
+        if ('None' in proposalOpt) {
+            throw new Error('Proposal not found');
+        }
+        const proposal = proposalOpt.Some;
+        proposal.votes += vote ? 1 : 0;
+        governanceProposals.insert(proposalId, proposal);
+    }),
+
+    // Consultar el estado de una propuesta de gobernanza
+    getProposalStatus: query([Principal], SnsGovernanceProposal, (proposalId) => {
+        const proposalOpt = governanceProposals.get(proposalId);
+        if ('None' in proposalOpt) {
+            throw new Error('Proposal not found');
+        }
+        return proposalOpt.Some;
+    })
+});

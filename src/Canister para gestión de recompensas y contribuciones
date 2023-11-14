@@ -1,0 +1,40 @@
+import { Canister, query, text, update, Principal, Variant, Record, StableBTreeMap, Void, Vec, ic, nat64 } from 'azle';
+
+// Estructura para la contribución de un usuario en un proyecto
+const UserContribution = Record({
+    userId: Principal,
+    projectId: Principal,
+    contributionDetails: text,
+    cyclesEarned: nat64
+});
+
+// Almacenamiento de contribuciones
+let contributions = StableBTreeMap(Principal, UserContribution, 0);
+
+export default Canister({
+    // Registrar una nueva contribución
+    addContribution: update([Principal, text, nat64], Void, (projectId, contributionDetails, cycles) => {
+        const userId = ic.caller();
+        const contribution = {
+            userId,
+            projectId,
+            contributionDetails,
+            cyclesEarned: cycles
+        };
+        contributions.insert(userId, contribution);
+    }),
+
+    // Obtener detalles de contribución de un usuario
+    getContributionDetails: query([Principal], UserContribution, (userId) => {
+        const contributionOpt = contributions.get(userId);
+        if ('None' in contributionOpt) {
+            throw new Error('Contribution not found');
+        }
+        return contributionOpt.Some;
+    }),
+
+    // Listar todas las contribuciones
+    listAllContributions: query([], Vec(UserContribution), () => {
+        return contributions.values();
+    })
+});

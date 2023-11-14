@@ -49,3 +49,52 @@ En este código:
 - `listAllProjects` es una función de consulta que devuelve una lista de todos los proyectos inscritos.
 
 Este código proporciona una base sólida para un canister que maneja proyectos universitarios, permitiendo su inscripción, consulta de detalles, validación y listado. Asegúrate de ajustar este código según las necesidades específicas de tu proyecto y el entorno en el que estás trabajando.
+
+
+__________________-
+proyecto sencillo 
+
+`dfx` is the tool you will use to interact with the IC locally and on mainnet. If you don't already have it installed:
+
+```bash
+npm run dfx_install
+```
+
+Next you will want to start a replica, which is a local instance of the IC that you can deploy your canisters to:
+
+```bash
+npm run dfx_install
+```
+
+If you ever want to stop the replica:
+
+```bash
+npm run replica_stop
+```
+
+Now you can deploy your canister locally:
+
+```bash
+npm install
+npm run AlegraStudio_deploy_local
+```
+
+To call the methods on your canister:
+
+```bash
+npm run AlegraStudio_call_get_message
+npm run AlegraStudio_call_set_message
+```
+
+If you run the above commands and then call `npm run ALegraStudio_call_get_message` you should see:
+
+```bash
+("BIenvenido a alegra studio!")
+```
+
+Assuming you have [created a cycles wallet](https://internetcomputer.org/docs/current/developer-docs/quickstart/network-quickstart) and funded it with cycles, you can deploy to mainnet like this:
+
+```bash
+npm run AlegraStudio_deploy_mainnet
+```
+

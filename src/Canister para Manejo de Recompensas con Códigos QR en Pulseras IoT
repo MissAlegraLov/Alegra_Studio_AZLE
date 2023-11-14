@@ -1,0 +1,53 @@
+import { Canister, query, update, Principal, Record, StableBTreeMap, Void, text, nat64, ic } from 'azle';
+
+// Estructura para almacenar información de recompensa y código QR
+const RewardQR = Record({
+    userId: Principal,
+    cyclesAmount: nat64,
+    qrCode: text, // Representa el código QR en una forma adecuada (puede ser una URL o un string codificado)
+    redeemed: boolean
+});
+
+// Almacenamiento de recompensas QR
+let rewardsQR = StableBTreeMap(Principal, RewardQR, 0);
+
+export default Canister({
+    // Generar un código QR para la recompensa
+    generateRewardQR: update([nat64], text, (cyclesAmount) => {
+        const userId = ic.caller();
+        const qrCode = generateQRCode(userId, cyclesAmount); // Implementar la lógica de generación de QR
+        const rewardQR = {
+            userId,
+            cyclesAmount,
+            qrCode,
+            redeemed: false
+        };
+        rewardsQR.insert(userId, rewardQR);
+        return qrCode;
+    }),
+
+    // Validar y canjear un código QR
+    redeemQRCode: update([text], Void, (qrCode) => {
+        const rewardOpt = rewardsQR.values().find(reward => reward.qrCode === qrCode && !reward.redeemed);
+        if (!rewardOpt) {
+            throw new Error('Invalid or already redeemed QR Code');
+        }
+        // Lógica para canjear la recompensa
+        rewardOpt.redeemed = true;
+        rewardsQR.insert(rewardOpt.userId, rewardOpt);
+    }),
+
+    // Consultar detalles de recompensa por QR
+    getRewardDetails: query([Principal], RewardQR, (userId) => {
+        const rewardOpt = rewardsQR.get(userId);
+        if ('None' in rewardOpt) {
+            throw new Error('Reward not found');
+        }
+        return rewardOpt.Some;
+    })
+});
+
+// Función auxiliar para generar un código QR
+function generateQRCode(userId: Principal, cyclesAmount: nat64): text {
+    // Implementación para generar un código QR (puede ser una URL o un string codificado)
+}
